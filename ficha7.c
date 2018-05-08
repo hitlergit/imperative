@@ -44,10 +44,15 @@ LInt init(LInt l)
 {
     LInt pt;
     pt = l;
-    while(pt->prox->prox != NULL)
-        pt = pt->prox;
-    free(pt->prox);
-    pt->prox= NULL;
+    if(pt == NULL || pt->prox == NULL)
+        l = NULL;
+    else
+    {
+        while(pt->prox->prox != NULL)
+            pt = pt->prox;
+        free(pt->prox);
+        pt->prox= NULL;
+    }
     return l;
 }
 
