@@ -60,12 +60,16 @@ LInt snoc(LInt l, int x)
 {
     LInt pt, new;
     pt = l;
-    while(pt->prox != NULL)
+
+    while(pt != NULL && pt->prox !=NULL)
         pt = pt->prox;
     new = malloc(sizeof(struct slist));
     new->valor = x;
     new->prox = NULL;
-    pt->prox = new;
+    if(pt == NULL)
+        l = new;
+    else
+        pt->prox = new;
     return l;
 }
 
@@ -85,7 +89,7 @@ void printList(LInt a)
     return;
 }
 
-int testa1()
+int main()
 {
     LInt a;
     a = malloc(sizeof(struct slist));
@@ -170,7 +174,7 @@ void imprimeT(Turma t)
     return;
 }
 
-int main()
+int main1()
 {
     Aluno a;
     strcpy(a.nome, "Ola");
