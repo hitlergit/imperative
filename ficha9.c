@@ -15,6 +15,8 @@ typedef struct lista
     struct lista *prox;
 } * LInt;
 
+typedef struct abin *ABin;
+
 void initDic(Dicionario *d)
 {
     *d = malloc(sizeof(struct abin));
@@ -61,6 +63,43 @@ int acrescenta(Dicionario *d, char *pal)
     return r;
 }
 
+char *maisFreq(Dicionario d, int *c)
+{
+    char *at, *dirc, *esqc;
+    int dir, esq;
+    if (d == NULL)
+    {
+        *c = 0;
+        at = NULL;
+    }
+    else
+    {
+        dirc = maisFreq(d->dir, &dir);
+        esqc = maisFreq(d->esq, &esq);
+        if (dirc == NULL && esqc == NULL)
+        {
+            at = d->pal;
+            *c = d->ocorr;
+        }
+        else if (dirc != NULL && dir >= esq && dir >= d->ocorr)
+        {
+            at = dirc;
+            *c = dir;
+        }
+        else if (esqc != NULL && esq > dir && esq > d->ocorr)
+        {
+            at = esqc;
+            *c = esq;
+        }
+        else
+        {
+            *c = d->ocorr;
+            at = d->pal;
+        }
+    }
+    return at;
+}
+
 void imprimeL(Dicionario d)
 {
     if (d == NULL)
@@ -68,16 +107,21 @@ void imprimeL(Dicionario d)
     imprimeL(d->dir);
     printf("(%s %d)", d->pal, d->ocorr);
     imprimeL(d->esq);
+    printf("\n");
     return;
 }
 
 int main()
 {
+    int x;
+    char *z;
     Dicionario d;
     initDic(&d);
     acrescenta(&d, "aaaa");
     acrescenta(&d, "bbbb");
     acrescenta(&d, "aaaa");
+    z = maisFreq(d, &x);
+    printf("%s %d\n", z, x);
     imprimeL(d);
     return 0;
 }
