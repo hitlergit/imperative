@@ -92,75 +92,97 @@ LInt reverseL(LInt l)
 
 void insertOrd(LInt *l, int x)
 {
-    LInt ant, new, at;
-    at = (*l);
+    LInt ant, prox, new;
     ant = NULL;
-    if ((*l) == NULL)
+    if (*l == NULL)
     {
-        new = malloc(sizeof(struct lligada));
-        new->valor = x;
-        new->prox = NULL;
-        *l = new;
+        *l = malloc(sizeof(LInt));
+        (*l)->valor = x;
+        (*l)->prox = NULL;
     }
     else
     {
-        while (at != NULL && at->valor < x)
-        {
-            ant = at;
-            at = at->prox;
-        }
-        new = malloc(sizeof(struct lligada));
+        for (prox = *l; prox != NULL && prox->valor < x; ant = prox, prox = prox->prox)
+            ;
+        new = malloc(sizeof(LInt));
         new->valor = x;
-        new->prox = at;
-        ant->prox = new;
+        new->prox = prox;
+        if (ant == NULL)
+            *l = new;
+        else
+            ant->prox = new;
     }
 }
 
 int removeOneOrd(LInt *l, int x)
 {
-    LInt pt, ant;
-    pt = *l;
-    ant = NULL;
     int r;
+    LInt pt, ant;
+    ant = NULL;
     r = 0;
     if (*l == NULL)
         r = 1;
     else
     {
-        while (pt != NULL && pt->valor != x)
-        {
-            ant = pt;
-            pt = pt->prox;
-        }
-        if (ant == NULL && pt->valor == x)
-            (*l) = (*l)->prox;
-        else if (ant == NULL)
-        {
+        for (pt = *l; pt != NULL && pt->valor < x; ant = pt, pt = pt->prox)
+            ;
+        if (pt == NULL)
             r = 1;
+        else if (x == pt->valor)
+        {
+            if (ant != NULL && pt != NULL)
+                ant->prox = pt->prox;
+            else if (ant == NULL)
+                *l = (*l)->prox;
         }
         else
         {
-            ant->prox = pt->prox;
-            free(pt);
+            r = 1;
         }
     }
     return r;
 }
 
+void merge(LInt *r, LInt a, LInt b)
+{
+
+    if (a == NULL)
+        *r = b;
+    else if (b == NULL)
+        *r = a;
+    else if (a->valor > b->valor)
+    {
+        *r = malloc(sizeof(LInt));
+        (*r)->valor = b->valor;
+        merge(&(*r)->prox, a, b->prox);
+    }
+    else
+    {
+        *r = malloc(sizeof(LInt));
+        (*r)->valor = a->valor;
+        merge(&(*r)->prox, a->prox, b);
+    }
+}
+
 int main()
 {
-    LInt l;
-    l = NULL;
+    LInt l, x, r;
+    x = l = NULL;
+    r = malloc(sizeof(struct lligada));
     l = newLInt(2, l);
     l = newLInt(1, l);
     // l = newLInt(1, l);
     printLInt(l);
     printf("%d\n", length(l));
     insertOrd(&l, 10);
+    x = newLInt(45, x);
+    x = newLInt(32, x);
+    printLInt(x);
     // freeL(l);
     // l = reverseL(l);
-    removeOneOrd(&l, 2);
-    printLInt(l);
-    printf("%d\n", length(l));
+    // removeOneOrd(&l, 2);
+    merge(&r, x, l);
+    printLInt(r);
+    printf("%d\n", length(r));
     return 0;
 }
