@@ -308,6 +308,19 @@ void appendL(LInt *l, int x)
     }
 }
 
+void concatL(LInt *a, LInt b)
+{
+    LInt pt;
+    if (*a == NULL)
+        *a = b;
+    else
+    {
+        for (pt = *a; pt->prox != NULL; pt = pt->prox)
+            ;
+        pt->prox = b;
+    }
+}
+
 int main()
 {
     LInt l, x, r;
