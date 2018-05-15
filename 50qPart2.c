@@ -335,6 +335,28 @@ LInt cloneL(LInt l)
     return r;
 }
 
+// LInt cloneRev(LInt l)
+// {
+//     LInt r;
+//     if(l == NULL)
+//         r = NULL;
+//     else if(l->prox == NULL)
+//     {
+
+//     }
+// }
+
+int maximo(LInt l)
+{
+    int maior;
+    maior = l->valor;
+    l = l->prox;
+    for (; l != NULL; l = l->prox)
+        if (l->valor > maior)
+            maior = l->valor;
+    return maior;
+}
+
 int main()
 {
     LInt l, x, r;
