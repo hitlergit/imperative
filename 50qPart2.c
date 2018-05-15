@@ -291,6 +291,23 @@ void init(LInt *l)
         ant->prox = NULL;
 }
 
+void appendL(LInt *l, int x)
+{
+    LInt new;
+    new = malloc(sizeof(LInt));
+    new->valor = x;
+    new->prox = NULL;
+    if (*l == NULL)
+        *l = new;
+    else
+    {
+        LInt pt;
+        for (pt = *l; pt->prox != NULL; pt = pt->prox)
+            ;
+        pt->prox = new;
+    }
+}
+
 int main()
 {
     LInt l, x, r;
