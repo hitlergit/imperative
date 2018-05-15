@@ -407,6 +407,14 @@ LInt NForward(LInt l, int N)
     return l;
 }
 
+int listToArray(LInt l, int v[], int N)
+{
+    int i;
+    for (i = 0; l != NULL && i < N; i++, l = l->prox)
+        v[i] = l->valor;
+    return i;
+}
+
 int main()
 {
     LInt l, x, r;
