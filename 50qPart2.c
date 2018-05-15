@@ -491,19 +491,19 @@ LInt rotateL(LInt l)
 LInt parte(LInt l)
 {
     LInt r, top, ant;
-    top = l;
     int i;
     i = 1;
-    while (l != NULL)
+    if (!l || !l->prox)
+        top = NULL;
+    else
     {
-        if (i % 2 != 0)
+        top = l->prox;
+        while (l->prox)
         {
-            r = l;
-            ant->prox = l->prox;
-            l = ant;
+            r = l->prox;
+            l->prox = l->prox->prox;
+            l = r;
         }
-        ant = l;
-        l = l->prox;
     }
     return top;
 }
