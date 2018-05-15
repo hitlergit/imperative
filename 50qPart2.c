@@ -488,6 +488,26 @@ LInt rotateL(LInt l)
     return l;
 }
 
+LInt parte(LInt l)
+{
+    LInt r, top, ant;
+    top = l;
+    int i;
+    i = 1;
+    while (l != NULL)
+    {
+        if (i % 2 != 0)
+        {
+            r = l;
+            ant->prox = l->prox;
+            l = ant;
+        }
+        ant = l;
+        l = l->prox;
+    }
+    return top;
+}
+
 int main()
 {
     LInt l, x, r;
