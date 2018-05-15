@@ -429,6 +429,33 @@ LInt arrayToList(int v[], int N)
     return r;
 }
 
+LInt somasAcL(LInt l)
+{
+    LInt top, new;
+    int sum;
+    sum = 0;
+    if (l == NULL)
+        top = NULL;
+    else
+    {
+        top = malloc(sizeof(LInt));
+        new = top;
+        while (l != NULL)
+        {
+            sum += l->valor;
+            new->valor = sum;
+            if (l->prox != NULL)
+            {
+                new->prox = malloc(sizeof(LInt));
+                new = new->prox;
+            }
+            l = l->prox;
+        }
+        new->prox = NULL;
+    }
+    return top;
+}
+
 int main()
 {
     LInt l, x, r;
