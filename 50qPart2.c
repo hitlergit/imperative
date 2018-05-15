@@ -384,6 +384,21 @@ int take(int n, LInt *l)
     return i;
 }
 
+int drop(int n, LInt *l)
+{
+    int i;
+    LInt pt, next;
+    pt = *l;
+    for (i = 0; i < n && pt != NULL; i++)
+    {
+        next = pt->prox;
+        free(pt);
+        pt = next;
+    }
+    *l = pt;
+    return i;
+}
+
 int main()
 {
     LInt l, x, r;
