@@ -531,3 +531,106 @@ int main()
     printf("%d\n", length(r));
     return 0;
 }
+
+typedef struct nodo
+{
+    int valor;
+    struct nodo *dir, *esq;
+} * ABin;
+
+int altura(ABin a)
+{
+    int h, hd, he;
+    if (a == NULL)
+        h = -1;
+    else
+    {
+        hd = 1 + altura(a->dir);
+        he = 1 + altura(a->esq);
+        h = hd > he ? hd : he;
+    }
+    return h;
+}
+
+ABin cloneAB(ABin a)
+{
+    ABin r;
+    if (a == NULL)
+        r = NULL;
+    else
+    {
+        r = malloc(sizeof(ABin));
+        r->valor = a->valor;
+        r->dir = cloneAB(a->dir);
+        r->esq = cloneAB(a->esq);
+    }
+    return r;
+}
+
+void mirror(ABin *a)
+{
+    if (*a != NULL)
+    {
+        ABin swap;
+        swap = (*a)->dir;
+        (*a)->dir = (*a)->esq;
+        (*a)->esq = swap;
+        mirror(&(*a)->dir);
+        mirror(&(*a)->esq);
+    }
+}
+
+LInt *inorder(ABin a, LInt *l)
+{
+    LInt new;
+    if (a == NULL)
+    {
+        *l = NULL;
+    }
+    else
+    {
+        *l = *inorder(a->esq, l);
+        new = malloc(sizeof(LInt));
+        new->valor = a->valor;
+        new->prox = *inorder(a->dir, l);
+        (*l)->prox = new;
+    }
+    return l;
+}
+
+void preorder(ABin a, LInt *l)
+{
+    LInt pt;
+    if (a == NULL)
+        *l = NULL;
+    else
+    {
+        *l = malloc(sizeof(LInt));
+        (*l)->valor = a->valor;
+        preorder(a->esq, &(*l)->prox);
+        pt = *l;
+        while (pt->prox != NULL)
+            pt = pt->prox;
+        preorder(a->dir, &pt->prox);
+    }
+}
+
+// void posorder(ABin a, LInt *l)
+// {
+//     LInt pt, new;
+//     if (a == NULL)
+//         *l = NULL;
+//     else
+//     {
+//         posorder(a->esq, l);
+//         for (pt = *l; !pt->prox; pt = pt->prox)
+//             ;
+//         posorder(a->dir, &pt->prox);
+//         for (; !pt->prox; pt = pt->prox)
+//             ;
+//         new = malloc(sizeof(LInt));
+//         new->valor = a->valor;
+//         new->prox = NULL;
+//         pt->prox = new;
+//     }
+// }
