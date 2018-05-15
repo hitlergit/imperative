@@ -415,6 +415,20 @@ int listToArray(LInt l, int v[], int N)
     return i;
 }
 
+LInt arrayToList(int v[], int N)
+{
+    LInt r;
+    if (N > 0)
+    {
+        r = malloc(sizeof(LInt));
+        r->valor = v[0];
+        r->prox = arrayToList(v + 1, N - 1);
+    }
+    else
+        r = NULL;
+    return r;
+}
+
 int main()
 {
     LInt l, x, r;
