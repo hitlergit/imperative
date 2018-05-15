@@ -357,6 +357,33 @@ int maximo(LInt l)
     return maior;
 }
 
+int take(int n, LInt *l)
+{
+    int i;
+    LInt pt, next, stop;
+    stop = NULL;
+    pt = *l;
+    if (pt == NULL)
+        i = 0;
+    else
+    {
+        for (i = 0; i < n && pt != NULL; i++)
+        {
+            stop = pt;
+            pt = pt->prox;
+        }
+        while (pt != NULL && pt->prox != NULL)
+        {
+            next = pt->prox;
+            free(pt);
+            pt = next;
+        }
+        if (stop != NULL)
+            stop->prox = NULL;
+    }
+    return i;
+}
+
 int main()
 {
     LInt l, x, r;
