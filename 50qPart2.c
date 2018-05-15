@@ -456,6 +456,23 @@ LInt somasAcL(LInt l)
     return top;
 }
 
+void remreps(LInt l)
+{
+    LInt ant, next;
+    while (l && l->prox)
+    {
+        next = l->prox;
+        if (l->valor == next->valor)
+        {
+            l->prox = next->prox;
+            free(next);
+            next = l->prox;
+        }
+        else
+            l = l->prox;
+    }
+}
+
 int main()
 {
     LInt l, x, r;
