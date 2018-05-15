@@ -274,6 +274,23 @@ int removeMaiorL(LInt *l)
     return maior;
 }
 
+void init(LInt *l)
+{
+    LInt pt, ant;
+    pt = *l;
+    ant = NULL;
+    while (pt->prox != NULL)
+    {
+        ant = pt;
+        pt = pt->prox;
+    }
+    free(pt);
+    if (ant == NULL)
+        *l = NULL;
+    else
+        ant->prox = NULL;
+}
+
 int main()
 {
     LInt l, x, r;
