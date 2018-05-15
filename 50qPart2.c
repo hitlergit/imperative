@@ -473,6 +473,21 @@ void remreps(LInt l)
     }
 }
 
+LInt rotateL(LInt l)
+{
+    if (l && l->prox)
+    {
+        LInt fst;
+        fst = l;
+        while (l->prox)
+            l = l->prox;
+        l->prox = fst;
+        l = fst->prox;
+        fst->prox = NULL;
+    }
+    return l;
+}
+
 int main()
 {
     LInt l, x, r;
