@@ -321,6 +321,20 @@ void concatL(LInt *a, LInt b)
     }
 }
 
+LInt cloneL(LInt l)
+{
+    LInt r;
+    if (l == NULL)
+        r = NULL;
+    else
+    {
+        r = malloc(sizeof(LInt));
+        r->valor = l->valor;
+        r->prox = cloneL(l->prox);
+    }
+    return r;
+}
+
 int main()
 {
     LInt l, x, r;
@@ -339,8 +353,8 @@ int main()
     // l = reverseL(l);
     // removeOneOrd(&l, 2);
     merge(&r, x, l);
-    printLInt(parteAmeio(&r));
     printLInt(r);
+    printLInt(cloneL(r));
     printf("%d\n", length(r));
     return 0;
 }
