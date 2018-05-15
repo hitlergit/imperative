@@ -164,6 +164,89 @@ void merge(LInt *r, LInt a, LInt b)
     }
 }
 
+LInt parteAmeio(LInt *a)
+{
+    int tam, i;
+    LInt pt, r, ant, top;
+    top = *a;
+    ant = NULL;
+    pt = *a;
+    tam = 0;
+    while (pt != NULL)
+    {
+        tam++;
+        pt = pt->prox;
+    }
+    for (i = 0; i < tam / 2; i++)
+    {
+        r = malloc(sizeof(struct lligada));
+        r = *a;
+        ant = r;
+        r = r->prox;
+        *a = (*a)->prox;
+    }
+    if (ant != NULL)
+    {
+        ant->prox = NULL;
+    }
+    else
+        top = NULL;
+    return top;
+}
+
+int removeAll(LInt *l, int x)
+{
+    int r;
+    LInt pt, ant;
+    ant = NULL;
+    pt = *l;
+    r = 0;
+    while (pt != NULL)
+    {
+        if (ant == NULL && pt->valor == x)
+        {
+            *l = (*l)->prox;
+            free(pt);
+            pt = *l;
+            ++r;
+        }
+        else if (pt->valor == x)
+        {
+            ant->prox = pt->prox;
+            free(pt);
+            pt = pt->prox;
+            ++r;
+        }
+        else
+        {
+            ant = pt;
+            pt = pt->prox;
+        }
+    }
+    return r;
+}
+
+int removeDups(LInt *l)
+{
+    int r;
+    r = 0;
+    LInt pt, ant, p;
+    pt = *l;
+    while (pt != NULL)
+    {
+        for (ant = pt, p = pt->prox; p != NULL; ant = p, p = p->prox)
+            if (pt->valor == p->valor)
+            {
+                ant->prox = p->prox;
+                free(p);
+                p = ant;
+                ++r;
+            }
+        pt = pt->prox;
+    }
+    return r;
+}
+
 int main()
 {
     LInt l, x, r;
@@ -182,6 +265,7 @@ int main()
     // l = reverseL(l);
     // removeOneOrd(&l, 2);
     merge(&r, x, l);
+    printLInt(parteAmeio(&r));
     printLInt(r);
     printf("%d\n", length(r));
     return 0;
