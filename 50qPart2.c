@@ -247,6 +247,33 @@ int removeDups(LInt *l)
     return r;
 }
 
+int removeMaiorL(LInt *l)
+{
+    LInt pt, ant;
+    int maior;
+    pt = *l;
+    maior = pt->valor;
+    pt = pt->prox;
+    for (; pt != NULL; pt = pt->prox)
+        if (pt->valor > maior)
+            maior = pt->valor;
+    for (pt = *l, ant = NULL; pt != NULL && pt->valor != maior; ant = pt, pt = pt->prox)
+        ;
+    if (pt == NULL)
+        ;
+    else if (ant == NULL)
+    {
+        *l = (*l)->prox;
+        free(pt);
+    }
+    else if (pt->valor == maior)
+    {
+        ant->prox = pt->prox;
+        free(pt);
+    }
+    return maior;
+}
+
 int main()
 {
     LInt l, x, r;
