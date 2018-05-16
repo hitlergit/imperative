@@ -42,21 +42,18 @@ int length(LInt a)
     return length;
 }
 
-// void freeL(LInt a)
-// {
-//     LInt prox, *ant;
-//     ant = &a;
-//     prox = a->prox;
-//     while (*ant != NULL)
-//     {
-//         prox = (*ant)->prox;
-//         free(*ant);
-//         *ant = NULL;
-//         ant = &prox;
-//     }
-//     a = NULL;
-//     return;
-// }
+void freeL(LInt a)
+{
+    LInt prox;
+    while (a != NULL)
+    {
+        prox = a->prox;
+        free(a);
+        a = NULL;
+        a = prox;
+    }
+    return;
+}
 
 void printL(LInt l)
 {
@@ -515,20 +512,20 @@ int main()
     r = malloc(sizeof(struct lligada));
     l = newLInt(2, l);
     l = newLInt(1, l);
-    // l = newLInt(1, l);
+    l = newLInt(1, l);
+    freeL(l);
     printLInt(l);
-    printf("%d\n", length(l));
-    insertOrd(&l, 10);
-    x = newLInt(45, x);
-    x = newLInt(32, x);
-    printLInt(x);
-    // freeL(l);
-    // l = reverseL(l);
-    // removeOneOrd(&l, 2);
-    merge(&r, x, l);
-    printLInt(r);
-    printLInt(cloneL(r));
-    printf("%d\n", length(r));
+    // printf("%d\n", length(l));
+    // insertOrd(&l, 10);
+    // x = newLInt(45, x);
+    // x = newLInt(32, x);
+    // printLInt(x);
+    // // l = reverseL(l);
+    // // removeOneOrd(&l, 2);
+    // merge(&r, x, l);
+    // printLInt(r);
+    // printLInt(cloneL(r));
+    // printf("%d\n", length(r));
     return 0;
 }
 
