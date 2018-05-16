@@ -634,3 +634,66 @@ void preorder(ABin a, LInt *l)
 //         pt->prox = new;
 //     }
 // }
+
+// int depth(ABin a, int x)
+// {
+//     int h, hd, he;
+//     if (a == NULL)
+//         h = -1;
+//     else if (a->valor == x)
+//         h = 0;
+//     else
+//     {
+//         hd = 1 + depth(a->dir, x);
+//         he = 1 + depth(a->esq, x);
+//         h = hd > he ? he : hd;
+//     }
+//     return h;
+// }
+
+int freeAB(ABin a)
+{
+    int r;
+    if (a == NULL)
+        r = 0;
+    else
+    {
+        r = 1 + freeAB(a->dir) + freeAB(a->esq);
+        free(a);
+    }
+    return r;
+}
+
+// int pruneAB(ABin *a, int l)
+// {
+//     int r;
+//     if (!a)
+//         r = 0;
+//     else
+//     {
+//         r = pruneAB((*a)->dir, l - 1) + pruneAB((*a)->esq, l - 1);
+//         if (l <= 0 && a)
+//         {
+//             r++;
+//             free(*a);
+//         }
+//         else if (l == 1)
+//             (*a)->dir = (*a)->esq = NULL;
+//     }
+//     return r;
+// }
+
+int iguaisAB(ABin a, ABin b)
+{
+    int r;
+    r = 1;
+    if ((a && !b) || (b && !a))
+        r = 0;
+    else if (!a && !b)
+        r = 1;
+    else if (a->valor == b->valor)
+        r = iguaisAB(a->dir, b->dir) && iguaisAB(a->esq, b->esq);
+    else
+        r = 0;
+    return r;
+}
