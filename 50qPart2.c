@@ -455,7 +455,7 @@ LInt somasAcL(LInt l)
 
 void remreps(LInt l)
 {
-    LInt ant, next;
+    LInt next;
     while (l && l->prox)
     {
         next = l->prox;
@@ -632,21 +632,28 @@ void preorder(ABin a, LInt *l)
 //     }
 // }
 
-// int depth(ABin a, int x)
-// {
-//     int h, hd, he;
-//     if (a == NULL)
-//         h = -1;
-//     else if (a->valor == x)
-//         h = 0;
-//     else
-//     {
-//         hd = 1 + depth(a->dir, x);
-//         he = 1 + depth(a->esq, x);
-//         h = hd > he ? he : hd;
-//     }
-//     return h;
-// }
+int depth(ABin a, int x)
+{
+    int h, hd, he;
+    if (a == NULL)
+        h = -1;
+    else if (a->valor == x)
+        h = 1;
+    else
+    {
+        hd = depth(a->dir, x);
+        he = depth(a->esq, x);
+        if (hd < 0 && he < 0)
+            h = -1;
+        else if (hd < 0)
+            h = ++he;
+        else if (he < 0)
+            h = ++hd;
+        else
+            h = 1 + (hd > he ? he : hd);
+    }
+    return h;
+}
 
 int freeAB(ABin a)
 {
@@ -661,24 +668,27 @@ int freeAB(ABin a)
     return r;
 }
 
-// int pruneAB(ABin *a, int l)
-// {
-//     int r;
-//     if (!a)
-//         r = 0;
-//     else
-//     {
-//         r = pruneAB((*a)->dir, l - 1) + pruneAB((*a)->esq, l - 1);
-//         if (l <= 0 && a)
-//         {
-//             r++;
-//             free(*a);
-//         }
-//         else if (l == 1)
-//             (*a)->dir = (*a)->esq = NULL;
-//     }
-//     return r;
-// }
+int pruneAB(ABin *a, int l)
+{
+    int r;
+    if (*a == NULL)
+        r = 0;
+    else if (l > 1)
+        r = pruneAB(&(*a)->esq, l - 1) + pruneAB(&(*a)->dir, l - 1);
+    else if (l == 1)
+    {
+        r = pruneAB(&(*a)->esq, l - 1) + pruneAB(&(*a)->dir, l - 1);
+        (*a)->esq = (*a)->dir = NULL;
+    }
+    else
+    {
+        r = pruneAB(&(*a)->esq, l - 1) + pruneAB(&(*a)->dir, l - 1);
+        *a = NULL;
+        free(*a);
+        ++r;
+    }
+    return r;
+}
 
 int iguaisAB(ABin a, ABin b)
 {
@@ -692,5 +702,108 @@ int iguaisAB(ABin a, ABin b)
         r = iguaisAB(a->dir, b->dir) && iguaisAB(a->esq, b->esq);
     else
         r = 0;
+    return r;
+}
+
+ABin somasAcA(ABin a)
+{
+    ABin r, dir, esq;
+    if (a == NULL)
+        r = NULL;
+    else
+    {
+        r = malloc(sizeof(struct nodo));
+        r->valor = 0;
+        dir = somasAcA(a->dir);
+        esq = somasAcA(a->esq);
+        r->dir = dir;
+        r->esq = esq;
+        if (dir)
+            r->valor += dir->valor;
+        if (esq)
+            r->valor += esq->valor;
+        r->valor += a->valor;
+    }
+    return r;
+}
+
+int contaFolhas(ABin a)
+{
+    int r;
+    r = 0;
+    if (a && !a->dir && !a->esq)
+        ++r;
+    else if (a)
+        r = contaFolhas(a->dir) + contaFolhas(a->esq);
+    return r;
+}
+
+ABin cloneMirror(ABin a)
+{
+    ABin r;
+    r = NULL;
+    if (a)
+    {
+        r = malloc(sizeof(struct nodo));
+        r->valor = a->valor;
+        r->dir = cloneMirror(a->esq);
+        r->esq = cloneMirror(a->dir);
+    }
+    return r;
+}
+
+int addOrd(ABin *a, int x)
+{
+    int r;
+    r = 0;
+    ABin pt, new;
+    if (*a == NULL)
+    {
+        *a = malloc(sizeof(struct nodo));
+        (*a)->valor = x;
+        (*a)->dir = (*a)->esq = NULL;
+    }
+    else
+    {
+        pt = *a;
+        while (pt && pt->valor != x)
+        {
+            if (pt->valor < x && !pt->esq)
+            {
+                new = malloc(sizeof(struct nodo));
+                new->valor = x;
+                new->dir = new->esq = NULL;
+                pt->esq = new;
+            }
+            else if (pt->valor < x)
+                pt = pt->esq;
+            else if (pt->valor > x && !pt->dir)
+            {
+                new = malloc(sizeof(struct nodo));
+                new->valor = x;
+                new->dir = new->esq = NULL;
+                pt->dir = new;
+            }
+            else if (pt->valor > x)
+                pt = pt->dir;
+            else
+                r = 1;
+        }
+    }
+}
+
+int lookupAB(ABin a, int x)
+{
+    int r;
+    r = 0;
+    while (a && !r)
+    {
+        if (a->valor < x)
+            a = a->dir;
+        else if (a->valor > x)
+            a = a->esq;
+        else
+            r = 1;
+    }
     return r;
 }
