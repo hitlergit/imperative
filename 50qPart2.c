@@ -807,3 +807,39 @@ int lookupAB(ABin a, int x)
     }
     return r;
 }
+
+int depthOrd(ABin a, int x)
+{
+    int r;
+    r = 1;
+    while (a && a->valor != x)
+    {
+        if (a->valor > x)
+            a = a->esq;
+        else if (a->valor < x)
+            a = a->dir;
+        ++r;
+    }
+    if (!a)
+        r = -1;
+    return r;
+}
+
+int deProcura(ABin a)
+{
+    int rDir, rEsq, r;
+    rDir = 1;
+    rEsq = 1;
+    r = 1;
+    if (a)
+    {
+        if (a && !a->dir && !a->esq)
+            r = 1;
+        if (a && a->dir && a->valor < a->dir->valor)
+            rDir = deProcura(a->dir);
+        else if (a && a->esq && a->valor > a->esq->valor)
+            rEsq = deProcura(a->esq);
+        r = rDir && rEsq;
+    }
+    return r;
+}
