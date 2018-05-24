@@ -161,6 +161,25 @@ void merge(LInt *r, LInt a, LInt b)
     }
 }
 
+void splitQS(LInt l, int x, LInt *mx, LInt *Mx)
+{
+    if (l)
+    {
+        if (l->valor < x)
+        {
+            *mx = malloc(sizeof(struct lligada));
+            (*mx)->valor = l->valor;
+            splitQS(l->prox, x, &(*mx)->prox, Mx);
+        }
+        else
+        {
+            *Mx = malloc(sizeof(struct lligada));
+            (*Mx)->valor = l->valor;
+            splitQS(l->prox, x, mx, &(*Mx)->prox);
+        }
+    }
+}
+
 LInt parteAmeio(LInt *a)
 {
     int tam, i;
@@ -828,17 +847,19 @@ int depthOrd(ABin a, int x)
 int deProcura(ABin a)
 {
     int rDir, rEsq, r;
-    rDir = 1;
-    rEsq = 1;
     r = 1;
     if (a)
     {
-        if (a && !a->dir && !a->esq)
-            r = 1;
-        if (a && a->dir && a->valor < a->dir->valor)
+        if (a->dir && a->valor < a->dir->valor)
             rDir = deProcura(a->dir);
-        else if (a && a->esq && a->valor > a->esq->valor)
+        else if (a->esq && a->valor > a->esq->valor)
             rEsq = deProcura(a->esq);
+        else if (a->dir)
+            rDir = 0;
+        else if (a->esq)
+            rEsq = 0;
+        rEsq = !a->esq ? 1 : rEsq;
+        rDir = !a->dir ? 1 : rDir;
         r = rDir && rEsq;
     }
     return r;
