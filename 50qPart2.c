@@ -596,24 +596,22 @@ void mirror(ABin *a)
     }
 }
 
-LInt *inorder(ABin a, LInt *l)
+void inorder(ABin a, LInt *l)
 {
-    LInt new;
-    if (a == NULL)
+    if (a)
     {
-        *l = NULL;
+        LInt new, pt;
+        inorder(a->esq, l);
+        for (; *l; l = &(*l)->prox)
+            ;
+        *l = malloc(sizeof(struct lligada));
+        (*l)->valor = a->valor;
+        l = &(*l)->prox;
+        inorder(a->dir, l);
     }
     else
-    {
-        *l = *inorder(a->esq, l);
-        new = malloc(sizeof(LInt));
-        new->valor = a->valor;
-        new->prox = *inorder(a->dir, l);
-        (*l)->prox = new;
-    }
-    return l;
+        *l = NULL;
 }
-
 void preorder(ABin a, LInt *l)
 {
     LInt pt;
